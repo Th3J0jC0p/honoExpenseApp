@@ -1,13 +1,13 @@
 # syntax = docker/dockerfile:1
 
 # Adjust BUN_VERSION as desired
-ARG BUN_VERSION=0.6.14
+ARG BUN_VERSION=1.2.9
 FROM oven/bun:${BUN_VERSION} as base
 
 LABEL fly_launch_runtime="Bun"
 
 # Bun app lives here
-WORKDIR /app
+WORKDIR /honoApp
 
 # Set production environment
 ENV NODE_ENV=production
@@ -24,13 +24,13 @@ RUN apt-get update -qq && \
 COPY --link bun.lock package.json ./
 RUN bun install --ci
 
-COPY --link frontend/bun.lock frontend/package.json ./frontend/
-RUN cd frontend && bun install --ci
+COPY --link expenseFrontend/bun.lock expenseFrontend/package.json ./expenseFrontend/
+RUN cd expenseFrontend && bun install --ci
 
 # Copy application code
 COPY --link . .
 
-WORKDIR /app/frontend
+WORKDIR /honoApp/expenseFrontend
 RUN bun run build
 RUN find . -mindepth 1 ! -regex '^./dist\(/.*\)?' -delete
 
@@ -38,7 +38,7 @@ RUN find . -mindepth 1 ! -regex '^./dist\(/.*\)?' -delete
 FROM base
 
 # Copy built application
-COPY --from=build /app /app
+COPY --from=build /honoApp /honoApp
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000
