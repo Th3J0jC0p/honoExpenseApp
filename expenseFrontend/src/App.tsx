@@ -1,24 +1,46 @@
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { useEffect, useState } from 'react'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [totalSpent, setTotalSpent] = useState(0);
+  useEffect(() => {
+    const fetchTotalSpent = async () => {
+      try {
+        const response = await fetch('/api/expenses/total');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setTotalSpent(data.total);
+      } catch (error) {
+        console.error('Error fetching total spent:', error);
+      }
+    };
+
+    fetchTotalSpent();
+  }
+  , [totalSpent]);
 
   return (
-    <>
-      <main className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
-        <h1 className='font-sans text-2xl'>Vite + React + tailwind</h1>
-        <div className="flex flex-col items-center justify-center min-h-svh">
-          <Button onClick={() => setCount((count) => count + 1)}><FontAwesomeIcon icon={faPlus} /></Button>
-          <p>
-            {count}
-          </p>
-          <Button onClick={() => setCount((count) => count -   1)}><FontAwesomeIcon icon={faMinus} /></Button>
-        </div>
-      </main>
-    </>
+    <Card className="w-[350px] m-auto mt-50">
+      <CardHeader className="text-center">
+        <CardTitle>Total Spent</CardTitle>
+        <CardDescription>Total amount you have spent already</CardDescription>
+      </CardHeader>
+      <CardContent className="text-center">
+        {totalSpent.toFixed(2)} $
+      </CardContent>
+      <CardFooter>
+      </CardFooter>
+    </Card>
   ) 
 }
 

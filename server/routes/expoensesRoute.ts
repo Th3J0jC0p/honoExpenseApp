@@ -58,6 +58,11 @@ export const expensesRoute = new Hono()
     return c.json({ expenses: fakeDataBase });
 })
 
+.get('/total', async (c) => {
+    const total = await fakeDataBase.reduce((acc, expense) => acc + expense.amount, 0);
+    return c.json({ total });
+})
+
 .post('/', zValidator("json", postExpenseSchema), async (c) => {
     const expense = await c.req.valid("json");
     fakeDataBase.push({
