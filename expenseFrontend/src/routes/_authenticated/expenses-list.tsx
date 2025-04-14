@@ -27,14 +27,14 @@ async function getExpenseList() {
   return data;
 }
 
-export const Route = createFileRoute('/expenses-list')({
+export const Route = createFileRoute('/_authenticated/expenses-list')({
   component: Expenses,
 })
 
 function Expenses() {
   const { isPending, data } = useQuery({ queryKey: ['get-all-expenses'], queryFn: getExpenseList })
 
-  const total = data?.expenses.reduce((acc, expense) => acc + expense.amount, 0) || 0;
+  const total = data?.expenses.reduce((acc, expense) => acc + Number(expense.amount), 0) || 0;
 
   return (
     <div>

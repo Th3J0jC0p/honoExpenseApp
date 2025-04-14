@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_authenticated/')({
   component: App,
 })
 
@@ -39,7 +39,7 @@ function App() {
         <CardDescription>Total amount you have spent already</CardDescription>
       </CardHeader>
       <CardContent className="text-center">
-        {isPending ? "..." : data.total.toFixed(2) + " $"} 
+        {isPending ? "..." : data.total + " $"} 
       </CardContent>
       <CardFooter>
       </CardFooter>

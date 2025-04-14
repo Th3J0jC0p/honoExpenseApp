@@ -7,7 +7,7 @@ import { useForm } from '@tanstack/react-form'
 
 import { api } from "@/lib/api"
 
-export const Route = createFileRoute('/create-expense')({
+export const Route = createFileRoute('/_authenticated/create-expense')({
   component: createExpense,
 })
 
@@ -17,7 +17,7 @@ function createExpense() {
   const form = useForm({
     defaultValues: {
       name: '',
-      amount: 0,
+      amount: '0',
     },
     onSubmit: async ({ value }) => {
       // Do something with form data
@@ -69,7 +69,7 @@ function createExpense() {
             return (
               <>  
                 <Label htmlFor={field.name} className='p-5'>Add expense Amount: </Label>
-                <Input type="number" id={field.name} name={field.name} onBlur={field.handleBlur} onChange={(e) => field.handleChange(Number(e.target.value))} value={field.state.value} />
+                <Input type="number" id={field.name} name={field.name} onBlur={field.handleBlur} onChange={(e) => field.handleChange(e.target.value)} value={field.state.value} />
                 {field.state.meta.isTouched && field.state.meta.errors.length ? (
                   <em>{field.state.meta.errors.join(', ')}</em>
                 ) : null}
